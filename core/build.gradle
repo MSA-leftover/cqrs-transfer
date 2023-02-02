@@ -1,0 +1,15 @@
+bootJar {enabled = false }
+jar { enabled = true }
+
+dependencies {
+    //JPA & MySQL -> Blocking
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    runtimeOnly 'mysql:mysql-connector-java:8.0.30'
+    //H2 Testing DB
+    runtimeOnly 'com.h2database:h2'
+
+    //r2dbc - mysql
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    runtimeOnly 'dev.miku:r2dbc-mysql:0.8.2.RELEASE'
+    implementation 'io.r2dbc:r2dbc-h2' //H2-Console 설정 때문에 runtimeOnly 로 작성하면 import 불가.
+}

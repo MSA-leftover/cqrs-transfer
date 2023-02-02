@@ -1,0 +1,4 @@
+rootProject.name = 'transfer'
+include 'command'
+include 'query'
+include 'core'

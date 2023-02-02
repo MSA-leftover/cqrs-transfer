@@ -1,0 +1,26 @@
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: msa-r2dbc-prod-database
+#  r2dbc:
+#    url: r2dbc:mysql://${DB_PROD_SVC}:${DB_PROD_PORT}/${DB_NAME}?serverTimezone=Asia/Seoul
+#    username: ${DB_USER}
+#    password: ${DB_PASSWD}
+#  sql:
+#    init:
+#      mode: never
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: msa-r2dbc-local-database
+#  r2dbc:
+#    url: r2dbc:h2:mem:///test:test@test
+#    username: test
+#    password: test
+#  sql:
+#    init:
+#      mode: embedded
+#webclient:
+#  h2-console-port: 8998

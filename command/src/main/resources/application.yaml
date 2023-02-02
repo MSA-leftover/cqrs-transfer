@@ -1,0 +1,78 @@
+#Groups
+spring:
+  profiles:
+    group:
+      "prod": "base, msa-r2dbc-prod-database, axon-setting"
+      "local": "base, msa-r2dbc-local-database, axon-setting"
+---
+#Defaults
+server: #Netty Server Port
+  port: 9999
+
+#Dev tools
+spring:
+  devtools:
+    restart:
+      exclude: static/**, public/**, resources/**
+  config:
+    activate:
+      on-profile: base
+
+#Actuator
+management:
+  endpoint:
+    #    logfile:
+    #      external-file: ./transfer.log
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,loggers,metrics,mappings,shutdown,threaddump,conditions,info,heapdump
+      base-path: /api/actuator
+      path-mapping:
+        loggers: logs
+        httptrace: trace
+info:
+  spring:
+    framework:
+      version: ${spring-framework.version}
+---
+spring:
+  config:
+    activate:
+      on-profile: msa-r2dbc-prod-database
+  r2dbc:
+    url: r2dbc:mysql://${DB_PROD_SVC}:${DB_PROD_PORT}/${DB_NAME}?serverTimezone=Asia/Seoul
+    username: ${DB_USER}
+    password: ${DB_PASSWD}
+  sql:
+    init:
+      mode: never
+---
+spring:
+  config:
+    activate:
+      on-profile: msa-r2dbc-local-database
+  r2dbc:
+    url: r2dbc:h2:mem:///test:test@test
+    username: test
+    password: test
+  sql:
+    init:
+      mode: embedded
+webclient:
+  h2-console-port: 9998
+---
+spring:
+  config:
+    activate:
+      on-profile: axon-setting
+  application:
+    name: msa-eventsourcing-cqrs-command
+
+axon:
+  serializer:
+    general: xstream
+  axonserver:
+    servers: localhost:8124
