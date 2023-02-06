@@ -10,5 +10,5 @@ import lombok.ToString;
 public class WithdrawMoneyEvent {
     private String userID;
     private String accountID;
-    private Long amount;// Money 금액.
+    private Long balance;// Money 금액.
 }

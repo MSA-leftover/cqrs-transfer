@@ -37,6 +37,9 @@ info:
   spring:
     framework:
       version: ${spring-framework.version}
+
+logging.level.com.cqrs.command : debug
+logging.level.org.axonframework : debug
 ---
 spring:
   config:

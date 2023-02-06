@@ -7,9 +7,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Getter
-public class DepositMoneyEvent {
-    private String userID;
+public class TransferCreationEvent {
     private String accountID;
-    private String destinationAccount;
-    private Long balance;// Money 금액.
+    private String destinationAccountID;
+    private String userID;
 }
