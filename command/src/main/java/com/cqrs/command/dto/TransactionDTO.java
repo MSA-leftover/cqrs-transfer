@@ -11,5 +11,5 @@ public class TransactionDTO {
     private String accountID;
     private String userID;
     private String destinationAccountID;
-    private Long balance;
+    private long balance;
 }

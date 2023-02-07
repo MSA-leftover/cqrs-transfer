@@ -11,4 +11,5 @@ public class TransferCreationEvent {
     private String accountID;
     private String destinationAccountID;
     private String userID;
+    private Long balance;
 }

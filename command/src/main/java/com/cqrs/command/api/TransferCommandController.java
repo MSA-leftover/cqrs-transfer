@@ -2,6 +2,7 @@ package com.cqrs.command.api;
 
 import com.cqrs.command.application.TransferService;
 import com.cqrs.command.dto.DepositDTO;
+import com.cqrs.command.dto.TransactionDTO;
 import com.cqrs.command.dto.WithdrawDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.methodOn;
@@ -33,6 +37,20 @@ public class TransferCommandController {
         Mono<Link> selfLink = linkTo(controller.deposit(depositDTO)).withSelfRel().toMono();
 
         return Mono.zip(this.transferService.depositMoney(depositDTO),selfLink)
+                .map(objects -> EntityModel.of(objects.getT1(), objects.getT2()));
+    }
+
+    @PostMapping(value = "/create", produces = MediaTypes.HAL_JSON_VALUE)
+    public Mono<EntityModel<?>> transferCreate(
+            @RequestBody TransactionDTO transactionDTO
+    ){
+        log.debug("transferCreate");
+        TransferCommandController controller = methodOn(TransferCommandController.class);
+        Mono<Link> selfLink = linkTo(controller.transferCreate(transactionDTO)).withSelfRel().toMono();
+
+        Map<String, String> result = new ConcurrentHashMap<>();
+
+        return Mono.zip(this.transferService.createTransaction(transactionDTO),selfLink)
                 .map(objects -> EntityModel.of(objects.getT1(), objects.getT2()));
     }
 

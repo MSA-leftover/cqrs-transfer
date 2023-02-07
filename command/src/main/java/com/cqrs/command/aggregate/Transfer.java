@@ -6,7 +6,8 @@ import com.cqrs.command.commands.WithdrawMoneyCommand;
 import com.cqrs.core.events.DepositMoneyEvent;
 import com.cqrs.core.events.TransferCreationEvent;
 import com.cqrs.core.events.WithdrawMoneyEvent;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -16,9 +17,11 @@ import org.axonframework.spring.stereotype.Aggregate;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Aggregate
 public class Transfer {
+
     @AggregateIdentifier
     private String accountID;
     private String userID;
@@ -27,14 +30,16 @@ public class Transfer {
 
     @CommandHandler
     public Transfer(TransferCreationCommand command){
-        apply(new TransferCreationEvent(command.getAccountID(),command.getDestinationAccountID(),command.getUserID()));
+        log.debug("handling command : {}",command);
+        TransferCreationEvent event = new TransferCreationEvent(command.getAccountID(),command.getDestinationAccountID(),command.getUserID(), command.getBalance());
+        apply(event);
     }
 
     @EventSourcingHandler
-    protected void createTransferEvent(TransferCreationEvent event){
+    protected void on(TransferCreationEvent event){
         this.accountID = event.getAccountID();
         this.userID = event.getUserID();
-        this.balance = 0L;//그냥 부르면 초기화.
+        this.balance = event.getBalance();
         this.destinationAccountID = event.getDestinationAccountID();
     }
 
@@ -46,7 +51,7 @@ public class Transfer {
     }
 
     @EventSourcingHandler
-    protected void depositMoney(DepositMoneyEvent event){
+    protected void on(DepositMoneyEvent event){
         log.debug("handling deposit event : {}",event);
         this.balance += event.getBalance();
     }
@@ -59,7 +64,7 @@ public class Transfer {
     }
 
     @EventSourcingHandler
-    protected void withdrawMoney(WithdrawMoneyEvent event){
+    protected void on(WithdrawMoneyEvent event){
         log.debug("handling withdraw event : {}",event);
         this.balance -= event.getBalance();// 이부분을 나중에 Ochestrator 에게 전달해야 함.
     }

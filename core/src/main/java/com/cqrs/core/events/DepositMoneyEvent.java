@@ -10,6 +10,6 @@ import lombok.ToString;
 public class DepositMoneyEvent {
     private String userID;
     private String accountID;
-    private String destinationAccount;
+    private String destinationAccountID;
     private Long balance;// Money 금액.
 }

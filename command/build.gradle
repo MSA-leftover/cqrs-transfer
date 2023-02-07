@@ -1,7 +1,11 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux' //Webflux
 
-    //Saga - Axon frameworks
+    //Saga - Axon frameworks - MVC
     implementation 'org.axonframework:axon-spring-boot-starter:4.7.0'
     implementation 'org.axonframework:axon-configuration:4.7.0'
+
+    //Saga - Axon frameworks - Reactor Extensions.
+    implementation 'org.axonframework.extensions.reactor:axon-reactor-spring-boot-starter:4.7.0'
+    implementation 'org.axonframework.extensions.reactor:axon-reactor-spring-boot-autoconfigure:4.7.0'
 }

@@ -15,4 +15,5 @@ public class TransferCreationCommand {
     private String accountID;
     private String destinationAccountID;
     private String userID;
+    private long balance;
 }
