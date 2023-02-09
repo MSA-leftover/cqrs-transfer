@@ -20,7 +20,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @AllArgsConstructor
 @NoArgsConstructor
 @Aggregate
-public class Transfer {
+public class Transfer { // Event-Stored 방식의 Transfer Aggregate.
 
     @AggregateIdentifier
     private String accountID;

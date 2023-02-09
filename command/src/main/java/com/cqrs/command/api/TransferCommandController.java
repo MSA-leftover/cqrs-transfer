@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.methodOn;
@@ -47,8 +45,6 @@ public class TransferCommandController {
         log.debug("transferCreate");
         TransferCommandController controller = methodOn(TransferCommandController.class);
         Mono<Link> selfLink = linkTo(controller.transferCreate(transactionDTO)).withSelfRel().toMono();
-
-        Map<String, String> result = new ConcurrentHashMap<>();
 
         return Mono.zip(this.transferService.createTransaction(transactionDTO),selfLink)
                 .map(objects -> EntityModel.of(objects.getT1(), objects.getT2()));
