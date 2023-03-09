@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableR2dbcRepositories
+@EnableR2dbcRepositories(basePackages = "com.cqrs.command.dao.reactive")
 @EnableTransactionManagement
 @PropertySource("classpath:application.yaml")
 public class DatabaseConfiguration extends AbstractR2dbcConfiguration {
@@ -33,4 +33,6 @@ public class DatabaseConfiguration extends AbstractR2dbcConfiguration {
     ReactiveTransactionManager transactionManager(ConnectionFactory connectionFactory){
         return new R2dbcTransactionManager(connectionFactory);
     }
+
+
 }

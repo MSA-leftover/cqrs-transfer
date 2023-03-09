@@ -12,8 +12,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@AutoConfigureAfter(AxonAutoConfiguration.class)
+//@Configuration
+//@AutoConfigureAfter(AxonAutoConfiguration.class)
 public class AxonConfig {
 
     private final int AGGREGATE_SNAPSHOT_THRESHOLD=5;
@@ -21,7 +21,7 @@ public class AxonConfig {
     //Snapshot Create
     @Bean
     public AggregateFactory<Transfer> aggregateFactory(){
-        return new GenericAggregateFactory<Transfer>(Transfer.class);
+        return new GenericAggregateFactory<>(Transfer.class);
     }
 
     @Bean

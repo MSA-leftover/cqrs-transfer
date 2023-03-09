@@ -50,6 +50,18 @@ public class TransferCommandController {
                 .map(objects -> EntityModel.of(objects.getT1(), objects.getT2()));
     }
 
+    @PostMapping(value = "/create/state",produces = MediaTypes.HAL_JSON_VALUE)
+    public Mono<EntityModel<?>> transferStateCreation(
+            @RequestBody TransactionDTO transactionDTO
+    ){
+        log.debug("transaction state creation.");
+        TransferCommandController controller = methodOn(TransferCommandController.class);
+        Mono<Link> selfLink = linkTo(controller.transferStateCreation(transactionDTO)).withSelfRel().toMono();
+
+        return Mono.zip(this.transferService.creationStateTransaction(transactionDTO),selfLink)
+                .map(objects -> EntityModel.of(objects.getT1(), objects.getT2()));
+    }
+
     @PostMapping(value = "/withdraw", produces = MediaTypes.HAL_JSON_VALUE)
     public Mono<EntityModel<String>> withdraw(
             @RequestBody WithdrawDTO withdrawDTO

@@ -2,8 +2,10 @@ package com.cqrs.command.application;
 
 
 import com.cqrs.command.commands.DepositMoneyCommand;
+import com.cqrs.command.commands.StateTransferCreationCommand;
 import com.cqrs.command.commands.TransferCreationCommand;
 import com.cqrs.command.commands.WithdrawMoneyCommand;
+import com.cqrs.command.dao.reactive.StateTransferRepository;
 import com.cqrs.command.dto.DepositDTO;
 import com.cqrs.command.dto.TransactionDTO;
 import com.cqrs.command.dto.WithdrawDTO;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class TransferServiceImpl implements TransferService{
     private final ReactorCommandGateway commandGateway;
+
+    private StateTransferRepository repository;
 
     @Override
     public Mono<String> depositMoney(DepositDTO depositDTO){
@@ -40,6 +44,18 @@ public class TransferServiceImpl implements TransferService{
     @Override
     public Mono<Map<String, String>> createTransaction(TransactionDTO transactionDTO){
         return this.commandGateway.send(new TransferCreationCommand(
+                transactionDTO.getAccountID(),transactionDTO.getDestinationAccountID(),
+                transactionDTO.getUserID(), transactionDTO.getBalance()
+        )).map(o -> {
+            Map<String, String> result = new ConcurrentHashMap<>();
+            result.put("res",o.toString());
+            return result;
+        });
+    }
+
+    @Override
+    public Mono<Map<String, String>> creationStateTransaction(TransactionDTO transactionDTO){
+        return this.commandGateway.send(new StateTransferCreationCommand(
                 transactionDTO.getAccountID(),transactionDTO.getDestinationAccountID(),
                 transactionDTO.getUserID(), transactionDTO.getBalance()
         )).map(o -> {

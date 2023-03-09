@@ -3,7 +3,7 @@ spring:
   profiles:
     group:
       "prod": "base, msa-r2dbc-prod-database, axon-setting"
-      "local": "base, msa-r2dbc-local-database, axon-setting"
+      "local": "base, msa-r2dbc-local-database, axon-setting, msa-hikari-default, msa-jpa-local-database"
 ---
 #Defaults
 server: #Netty Server Port
@@ -79,3 +79,39 @@ axon:
     general: xstream
   axonserver:
     servers: localhost:8124
+---
+spring:
+  config:
+    activate:
+      on-profile: msa-jpa-local-database
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    jdbcUrl: jdbc:h2:mem:test;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database: h2
+  sql:
+    init:
+      mode: embedded
+---
+spring:
+  config:
+    activate:
+      on-profile: msa-hikari-default
+  datasource:
+    hikari: #DB Connection Pool - Careful Deadlock issue
+      transaction-isolation: TRANSACTION_REPEATABLE_READ # Not use SERIALIZABLE
+      maximum-pool-size: 10
+      minimum-idle: 10 # Hikari Powerfully recommended. Same value as maximum-pool-size
+      connection-timeout: 5000 #5s Timeout.
+      validation-timeout: 3000 #3s Timeout
+      connection-test-query: SELECT 1
+      idle-timeout: 60000
+      max-lifetime: 1800000
+      pool-name: hikari_pool
