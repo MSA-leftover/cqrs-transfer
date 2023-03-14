@@ -5,7 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("com.cqrs.core")
+@ComponentScan({
+        "com.cqrs.core",
+        "com.cqrs.query"
+})
 public class QueryApplication {
     public static void main(String[] args) {
         SpringApplication.run(QueryApplication.class, args);
