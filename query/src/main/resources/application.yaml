@@ -77,6 +77,8 @@ spring:
 
 axon:
   serializer:
-    general: xstream
+    general: jackson
+    events: jackson
+    messages: jackson
   axonserver:
     servers: localhost:8124

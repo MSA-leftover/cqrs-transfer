@@ -8,12 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.Timestamp;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
+@Component
 public class TransferProjection {
 
     private final TransferRepository repository;
@@ -21,12 +22,11 @@ public class TransferProjection {
     @EventHandler
     protected void on(TransferCreationEvent event, @Timestamp Instant instant){
         log.debug("projecting {} , timestamp : {}", event, instant.toString());
-
         this.repository.save(Transfer.builder()
                 .accountID(event.getAccountID())
                 .userID(event.getUserID())
                 .destinationAccountID(event.getDestinationAccountID())
-                .balance(event.getBalance()).build())
+                .balance(event.getBalance()).build()).log("save")
                 .subscribe();
     }
 }
