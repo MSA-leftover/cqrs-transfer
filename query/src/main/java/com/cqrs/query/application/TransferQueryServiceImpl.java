@@ -48,11 +48,12 @@ public class TransferQueryServiceImpl implements TransferQueryService{
         TransferQuery query = new TransferQuery(account_id);
         log.debug("transaction : {}",query);
 
-        return queryGateway.subscriptionQuery(query, ResponseTypes.multipleInstancesOf(Transfer.class), ResponseTypes.instanceOf(Transfer.class))
-                .flatMapMany(result -> result.initialResult()
-                        .flatMapMany(Flux::fromIterable)
-                        .concatWith(result.updates())
-                        .doFinally(signal -> result.close()));
+        return this.queryGateway.subscriptionQuery(query, Transfer.class);
+//        return queryGateway.subscriptionQuery(query, ResponseTypes.multipleInstancesOf(Transfer.class), ResponseTypes.instanceOf(Transfer.class))
+//                .flatMapMany(result -> result.initialResult()
+//                        .flatMapMany(Flux::fromIterable)
+//                        .concatWith(result.updates())
+//                        .doFinally(signal -> result.close()));
     }
 
 }

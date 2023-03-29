@@ -71,7 +71,7 @@ public class TransferProjection {
         return Mono.fromCallable(()->{
             this.queryUpdateEmitter.emit(TransferQuery.class,
                     query -> {
-                        log.info("query Emit {}, {}",event.getAccountID(), query.getAccount_id());
+                        log.info("query Emit {}, {}, {}",event.getAccountID(), query.getAccount_id(),query.getAccount_id().equals(event.getAccountID()));
                         return query.getAccount_id().equals(event.getAccountID());
                     },
                     transfer);
